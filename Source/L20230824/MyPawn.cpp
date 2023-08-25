@@ -10,6 +10,9 @@
 #include "MyActorComponent.h"
 #include "Components/ArrowComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+
 
 // Sets default values
 //CDO
@@ -74,6 +77,8 @@ void AMyPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	AddMovementInput(GetActorForwardVector(), BoostValue);
+
 }
 
 // Called to bind functionality to input
@@ -81,12 +86,27 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
-	PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
 
-	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AMyPawn::Fire);
-	PlayerInputComponent->BindAction(TEXT("Boost"), IE_Pressed, this, &AMyPawn::Boost);
-	PlayerInputComponent->BindAction(TEXT("Boost"), IE_Released, this, &AMyPawn::UnBoost);
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent);
+	if (EnhancedInputComponent)
+	{
+		EnhancedInputComponent->BindAction(IA_Boost, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedBoost);
+		EnhancedInputComponent->BindAction(IA_Boost, ETriggerEvent::Completed, this, &AMyPawn::EnhancedUnBoost);
+
+		EnhancedInputComponent->BindAction(IA_Fire, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedFire);
+
+		EnhancedInputComponent->BindAction(IA_PitchAndRoll, ETriggerEvent::Triggered, this, &AMyPawn::EnhancedPitchAndRoll);
+
+	}
+	else
+	{
+		//PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
+		//PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
+
+		//PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AMyPawn::Fire);
+		//PlayerInputComponent->BindAction(TEXT("Boost"), IE_Pressed, this, &AMyPawn::Boost);
+		//PlayerInputComponent->BindAction(TEXT("Boost"), IE_Released, this, &AMyPawn::UnBoost);
+	}
 	
 }
 
@@ -106,14 +126,36 @@ void AMyPawn::Roll(float Value)
 
 void AMyPawn::Fire()
 {
+	//GetWorld()->SpawnActor<>();
 }
 
 void AMyPawn::Boost()
 {
+	
 }
 
 void AMyPawn::UnBoost()
 {
+}
+
+void AMyPawn::EnhancedBoost(const FInputActionValue& Value)
+{
+	BoostValue = 1.0f;
+}
+
+void AMyPawn::EnhancedUnBoost(const FInputActionValue& Value)
+{
+	BoostValue = 0.5f;
+}
+
+void AMyPawn::EnhancedFire(const FInputActionValue& Value)
+{
+
+}
+
+void AMyPawn::EnhancedPitchAndRoll(const FInputActionValue& Value)
+{
+
 }
 
 

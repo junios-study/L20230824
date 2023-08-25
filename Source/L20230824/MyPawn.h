@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
 
+#include "InputActionValue.h"
+
 #include "MyPawn.generated.h"
 
 class UBoxComponent;
@@ -67,6 +69,9 @@ public:
 	float PropellerRotationSpeed = 3060;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float BoostValue = 0.5f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
 	int32 Gold = 100;
 
 	void Pitch(float Value);
@@ -78,4 +83,21 @@ public:
 	void Boost();
 
 	void UnBoost();
+
+	void EnhancedBoost(const FInputActionValue& Value);
+
+	void EnhancedUnBoost(const FInputActionValue& Value);
+
+	void EnhancedFire(const FInputActionValue& Value);
+
+	void EnhancedPitchAndRoll(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_Boost;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_Fire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputAction* IA_PitchAndRoll;
 };

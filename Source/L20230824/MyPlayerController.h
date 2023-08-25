@@ -16,4 +16,9 @@ class L20230824_API AMyPlayerController : public APlayerController
 public:
 	virtual void Tick(float DeltaSecond) override;
 	
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	class UInputMappingContext* DefaultMappingContext;
+
 };
