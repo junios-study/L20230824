@@ -3,3 +3,7 @@
 
 #include "MyPlayerController.h"
 
+void AMyPlayerController::Tick(float DeltaSecond)
+{
+	Super::Tick(DeltaSecond);
+}

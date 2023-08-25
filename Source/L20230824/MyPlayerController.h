@@ -13,5 +13,7 @@ UCLASS()
 class L20230824_API AMyPlayerController : public APlayerController
 {
 	GENERATED_BODY()
+public:
+	virtual void Tick(float DeltaSecond) override;
 	
 };

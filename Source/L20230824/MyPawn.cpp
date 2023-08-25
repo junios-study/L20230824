@@ -9,6 +9,7 @@
 #include "GameFramework/FloatingPawnMovement.h"
 #include "MyActorComponent.h"
 #include "Components/ArrowComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 //CDO
@@ -38,7 +39,7 @@ AMyPawn::AMyPawn()
 
 	Right = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Right"));
 	Right->SetupAttachment(Body);
-	Left->SetRelativeLocation(FVector(37.257852f, 21.0f, 0.986638f));
+	Right->SetRelativeLocation(FVector(37.257852f, 21.0f, 0.986638f));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> SM_Propeller(TEXT("/Script/Engine.StaticMesh'/Game/P38/Meshes/SM_P38_Propeller.SM_P38_Propeller'"));
 	if (SM_Propeller.Succeeded())
 	{
@@ -64,6 +65,8 @@ AMyPawn::AMyPawn()
 void AMyPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+
 }
 
 // Called every frame
@@ -78,5 +81,39 @@ void AMyPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis(TEXT("Pitch"), this, &AMyPawn::Pitch);
+	PlayerInputComponent->BindAxis(TEXT("Roll"), this, &AMyPawn::Roll);
+
+	PlayerInputComponent->BindAction(TEXT("Fire"), IE_Pressed, this, &AMyPawn::Fire);
+	PlayerInputComponent->BindAction(TEXT("Boost"), IE_Pressed, this, &AMyPawn::Boost);
+	PlayerInputComponent->BindAction(TEXT("Boost"), IE_Released, this, &AMyPawn::UnBoost);
+	
 }
+
+void AMyPawn::Pitch(float Value)
+{
+	AddActorLocalRotation(FRotator(Value * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()) * 60.0f,
+		0,
+		0));
+}
+
+void AMyPawn::Roll(float Value)
+{
+	AddActorLocalRotation(FRotator(0,
+		0,
+		Value * UGameplayStatics::GetWorldDeltaSeconds(GetWorld()) * 60.0f));
+}
+
+void AMyPawn::Fire()
+{
+}
+
+void AMyPawn::Boost()
+{
+}
+
+void AMyPawn::UnBoost()
+{
+}
+
 

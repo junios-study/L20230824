@@ -63,4 +63,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
 	UMyActorComponent* MyActorComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	float PropellerRotationSpeed = 3060;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Data")
+	int32 Gold = 100;
+
+	void Pitch(float Value);
+
+	void Roll(float Value);
+
+	void Fire();
+
+	void Boost();
+
+	void UnBoost();
 };
